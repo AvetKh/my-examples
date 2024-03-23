@@ -1,6 +1,5 @@
 import { Pressable, Text, ViewStyle } from 'react-native';
 import { useState } from 'react';
-import { useI18N } from "../../assets/i18n";
 
 
 type TextButtonProps = {
@@ -9,6 +8,8 @@ type TextButtonProps = {
 	disabled?: boolean;
 	fillBackground?: string;
 	pressedColor?: string;
+	color?: string;
+	textStyles?: ViewStyle,
 	onPress: () => unknown;
 };
 
@@ -17,8 +18,10 @@ export function TextButton({
 	styles,
 	disabled = false,
 	pressedColor = '#F8F0F6',
+	color,
 	fillBackground,
-	onPress
+	onPress,
+	textStyles
 }: TextButtonProps) {
 	const [isOnPressing, setIsOnPressing] = useState(false);
 	
@@ -33,14 +36,16 @@ export function TextButton({
 				alignSelf: 'flex-start',
 				paddingVertical: 8,
 				paddingHorizontal: 12,
-				borderRadius: 25,
+				borderRadius: 12,
 				...styles,
 			}}
 		>
 			<Text
 				style={{
-					fontSize: 20,
-					color: '#FFF',
+					fontSize: 17,
+					color: color || '#e0e0e0',
+					textAlign: 'center',
+					...textStyles
 				}}
 			>{text}</Text>
 		</Pressable>

@@ -1,73 +1,66 @@
-import * as SecureStore from 'expo-secure-store';
-import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-import { Language } from "../../assets/i18n";
+import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import { Product } from "../api/types";
 
 
-const SETTINGS_KEY = "UserSettings__@@@l1"
-
-type UserState = {
-	language?: Language;
-	accessToken?: {
-		token: string;
-		email: string;
-		userId: number;
-		exp: number;
-	};
-	username?: string,
-	firstName?: string,
-	lastName?: string,
-	gender?: string,
-	image?: string,
-	refreshToken?: string;
+type ProductState = {
+	categoryProduct: {
+		[categoryName: string]: Product[];
+	}
+	product: Product | null;
+	favoriteProducts: number[] ;
 }
 
-const initialState: UserState = {
-	language: 'en',
+const initialState: ProductState = {
+	categoryProduct: {},
+	product: null,
+	favoriteProducts: []
 }
 
-function parseProfileFromToken(token: string): any {
-	const profileBase64 = token.split('.')[1];
-	const profileString = Buffer.from(profileBase64, 'base64').toString();
-	// console.log(profileString)
-	return JSON.parse(profileString);
-}
-
-export const userSlice = createSlice({
-	name: 'user',
+export const productSlice = createSlice({
+	name: 'product',
 	initialState,
 	reducers: {
-		clearTokens(state) {
-			delete state.accessToken;
-			delete state.refreshToken;
+		updateCategoryProducts: (state, action) => {
+			const { categoryName, productList } = action.payload
+			state.categoryProduct[categoryName] = productList
 		},
-		updateAccessToken(state, action: PayloadAction<string>) {
-			state.accessToken = {
-				...parseProfileFromToken(action.payload),
-				token: action.payload
-			};
+		getProduct: (state, action) => {
+			const { id, category } = action.payload
+			state.product = state.categoryProduct[category].find(product => product.id === id) || null
 		},
-		update(state, action: PayloadAction<Partial<UserState>>) {
-			const settings = action.payload
-			state = settings
-			if (!settings.lastName) state.language = 'en'
+		updateFavoriteList: (state, action) => {
+			const { productId, category } = action.payload
+			
+			state.favoriteProducts = state.favoriteProducts || []
+			
+			if (state.favoriteProducts.includes(productId)) {
+				const index = state.favoriteProducts.indexOf(productId);
+				if (index !== -1) {
+					state.favoriteProducts.splice(index, 1); // Remove productId from array
+				}
+			} else {
+				state.favoriteProducts.push(productId);
+			}
 		}
 	},
 })
 
-export const updateUserSettings = createAsyncThunk<void, Partial<Omit<UserState, 'accessToken'>>>(
-	'updateUserSettings',
-	async (settings, { dispatch, getState }) => {
-		dispatch(userSlice.actions.update(settings))
-		await SecureStore.setItemAsync(SETTINGS_KEY, JSON.stringify(( getState() as RootState ).user))
-	});
+const product = (state: RootState) => state.product.product;
+const favoriteProducts = (state: RootState) => state.product.favoriteProducts;
+const getProductsByCategory = (state: RootState) => state.product.categoryProduct;
 
-export const userLoggedOut = createAsyncThunk('userLoggedOut', async (_, { dispatch }) => {
-	dispatch(userSlice.actions.clearTokens())
-	await dispatch(updateUserSettings({}))
-});
-export const { updateAccessToken } = userSlice.actions;
-export const selectUserLoggedInState = (state: RootState) => Boolean(state.user.refreshToken)
+const getProduct = productSlice.actions.getProduct;
+const updateFavoriteList = productSlice.actions.updateFavoriteList;
+const updateCategoryProductsList = productSlice.actions.updateCategoryProducts;
 
-export default userSlice.reducer
+
+export {
+	product,
+	favoriteProducts,
+	getProductsByCategory,
+	getProduct,
+	updateFavoriteList,
+	updateCategoryProductsList,
+}
+export default productSlice.reducer

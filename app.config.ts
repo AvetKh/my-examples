@@ -1,7 +1,12 @@
 import { ConfigContext } from '@expo/config';
 
+type ENV = {
+	APP_STAGE: string;
+	API_BASE_URL: string;
+}
 
-const ENV = process.env as any;
+
+const ENV = process.env as ENV;
 
 const APP_STAGE = ENV.APP_STAGE ?? 'dev'
 const API_BASE_URL = ENV.API_BASE_URL ?? ( APP_STAGE === 'prod' ? '' : 'https://dummyjson.com/' );

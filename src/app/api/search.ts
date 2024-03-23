@@ -1,16 +1,13 @@
 import { api } from "./_api.root";
-import { AuthBody, AuthResponse } from "./types";
+import { SearchResponse } from "./types";
 
 
-export const authApi = api.injectEndpoints({
+export const searchApi = api.injectEndpoints({
 	endpoints: (build) => ( {
-		login: build.mutation<AuthResponse, AuthBody>({
-			query: ({ username, password }) => ( {
-				method: 'post',
-				url: 'auth/login',
-				body: {
-					username, password
-				}
+		search: build.mutation<SearchResponse, string>({
+			query: (searchTerm: '') => ( {
+				method: 'get',
+				url: `/products/search?q=${searchTerm}`,
 			} )
 		})
 	} )

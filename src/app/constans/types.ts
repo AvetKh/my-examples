@@ -1,22 +1,16 @@
 export enum RoutsNames {
 	Home = 'Home',
 	Search = 'Search',
-	TvShow = 'TvShow',
-	Movies = 'Movies',
-	Genres = 'Genres',
-	WatchLater = 'WatchLater'
+	Categories = 'Categories',
+	WishList = 'WishList',
+	Profile = 'Profile',
 }
 
 
-type RoutNames = 'Home' | 'Search' | 'TvShow' | 'Movies' | 'Genres' | 'WatchLater'
-type RoutTittles = 'Home' | 'Search' | 'Tv Show' | 'Movies' | 'Genres' | 'Watch Later'
-type MenuList = {
-	id: number, imageUrl: string, tittle: RoutTittles
-}[]
+type RoutNames = 'Home'  | 'Categories' | 'WishList' | 'Profile'
+
 
 
 export type {
-	MenuList,
 	RoutNames,
-	RoutTittles,
 }

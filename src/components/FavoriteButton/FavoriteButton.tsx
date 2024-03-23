@@ -1,46 +1,26 @@
-import { IconButton } from ".";
-import { useCandellaTheme } from "../theme";
-import { useFavoriteProduct, useFavoriteSupplier } from "@app/hooks";
+import { IconButton } from "./IconButton";
+import { Pressable } from "react-native";
 
 
 type FavoriteButtonProps = {
-	id: number;
-	type: "supplier" | "article";
-	isFavoritesScreen: boolean;
-	isProductIcon?: boolean
+	handlePressFavorite: () => void
+	isFavorite: boolean;
 };
 
 export const FavoriteButton = ({
-	id,
-	type,
-	isFavoritesScreen,
-	isProductIcon = false,
+	isFavorite = true,
+	handlePressFavorite,
 }: FavoriteButtonProps) => {
-	const { isFavorite, toggle } = type === "supplier"
-		? useFavoriteSupplier(id)
-		: useFavoriteProduct(id);
-	
-	const { colors } = useCandellaTheme();
 	
 	return (
-		<>
-			{isFavoritesScreen ? (
-				<IconButton
-					backgroundColor={"transparent"}
-					pressedColor={"#ffffff30"}
-					icon={"close"}
-					iconColor={colors.white}
-					onPress={toggle}
-				/>
-			) : (
-				<IconButton
-					iconColor={isFavorite ? colors.primary.main : (isProductIcon ? colors.outOfStack.isStock :  '#FFF')}
-					pressedColor={"#ffffff30"}
-					backgroundColor={"rgba(0,0,0,0)"}
-					icon={isFavorite ? "heart-filled" : "heart-outline"}
-					onPress={toggle}
-				/>
-			)}
-		</>
+		<Pressable>
+			<IconButton
+				iconColor={isFavorite ? 'rgba(255,15,15,0.74)' : '#1a1a1a'}
+				pressedColor={"#ffffff30"}
+				backgroundColor={"rgba(0,0,0,0)"}
+				icon={isFavorite ? "heart-filled" : "heart-outline"}
+				onPress={handlePressFavorite}
+			/>
+		</Pressable>
 	);
 };

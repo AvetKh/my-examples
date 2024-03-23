@@ -1,13 +1,22 @@
 import { NavigationProp } from "@react-navigation/core/src/types";
 
+export type CategoryScreens = {
+	Category: undefined,
+	Catalogs: {
+		categoryName: string
+	}
+}
 
 export type TabsRouteParams = {
-	Home: undefined;
-	Search: undefined;
-	TvShow: undefined;
-	Movies: undefined;
-	Genres: undefined;
-	WatchLater: undefined;
+	Tabs: {
+		Home: undefined;
+		Categories: CategoryScreens
+		WishList: undefined;
+		Profile: undefined;
+	}
+	Auth: undefined;
+	ProductView: undefined;
+	Search: undefined
 };
 
 export type TabsNavPropsType = NavigationProp<TabsRouteParams>;
