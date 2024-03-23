@@ -3,7 +3,7 @@
 This is a sample README file for a project.
 
 ## Installation
-- Clone the repository: `git clone https://github.com/username/repo.git`
+- Clone the repository: `git clone https://github.com/AvetKh/my-examples.git`
 - Install dependencies: `npm install`
 
 ## Usage
